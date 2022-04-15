@@ -1,8 +1,9 @@
 package com.java.university;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Check {
+public class Check implements Serializable {
 
     private String cardNumber;
 

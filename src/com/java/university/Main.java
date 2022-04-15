@@ -8,10 +8,19 @@ public class Main {
     private static final UserService USER_SERVICE = new UserService();
 
     public static void main(String[] args) {
-        Init init = new Init();
-        init.init();
-        readMainMenu();
-        mainController();
+//        Init init = new Init();
+//        init.init();
+        while (true) {
+            try {
+                readMainMenu();
+                mainController();
+            } catch (GachiException e) {
+                System.out.println("Keep you ass back here");
+            } catch (Exception e) {
+                System.out.println("Exception");
+            }
+
+        }
     }
 
     public static void readMainMenu() {
@@ -21,7 +30,7 @@ public class Main {
                 "3. back");
     }
 
-    private static void mainController() {
+    private static void mainController() throws GachiException {
         switch (choose()) {
             case 1:
                 readUserMenu();
@@ -32,10 +41,10 @@ public class Main {
                 adminController();
                 break;
             default:
-                System.out.println("Incorrect input!!!");
         }
-        readMainMenu();
-        mainController();
+        throw new GachiException();
+//        readMainMenu();
+//        mainController();
     }
 
     public static void readUserMenu() {
@@ -45,7 +54,7 @@ public class Main {
                 "3. back");
     }
 
-    public static void userController() {
+    public static void userController() throws GachiException {
         switch (choose()) {
             case 1:
                 USER_SERVICE.findCheck();
@@ -67,7 +76,7 @@ public class Main {
                 "3. back");
     }
 
-    public static void adminController() {
+    public static void adminController() throws GachiException {
         switch (choose()) {
             case 1:
                 USER_SERVICE.findAllCheckStatus();

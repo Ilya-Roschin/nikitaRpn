@@ -8,7 +8,7 @@ public class UserService {
     private static final Scanner SCANNER = new Scanner(System.in);
     private static final UserRepository USER_REPOSITORY = new UserRepository();
 
-    public void findCheck() {
+    public void findCheck() throws GachiException {
         User foundedUser = USER_REPOSITORY.findByName(inputUsername());
         if (!foundedUser.getUsername().equals("empty") && !foundedUser.isRole()) {
             Check check = foundedUser.getCheck();
@@ -27,7 +27,7 @@ public class UserService {
 
     }
 
-    public void transaction() {
+    public void transaction() throws GachiException {
         System.out.println("from user: ");
         User userFrom = USER_REPOSITORY.findByName(inputUsername());
         System.out.println("To user: ");
@@ -48,17 +48,21 @@ public class UserService {
             userFrom.setCheck(new Check(userFrom.getCheck().getCardNumber(),
                     userFrom.getCheck().getMoney() - transferAmount,
                     userFrom.getCheck().isStatus()));
+
+            USER_REPOSITORY.updateUser(userTo.getUsername(),userTo);
+            USER_REPOSITORY.updateUser(userFrom.getUsername(),userFrom);
         } else {
             System.out.println("Incorrect input or one of this user is blocked");
         }
 
     }
 
-    public void blockCheck() {
+    public void blockCheck() throws GachiException {
         User foundedUser = USER_REPOSITORY.findByName(inputUsername());
         if (!Objects.equals(foundedUser.getUsername(), "empty")) {
             Check check = foundedUser.getCheck();
             check.setStatus(!check.isStatus());
+            USER_REPOSITORY.updateUser(foundedUser.getUsername(),foundedUser);
         } else {
             System.out.println("Operation is not successful");
         }
