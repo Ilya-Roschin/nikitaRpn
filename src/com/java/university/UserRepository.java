@@ -7,7 +7,7 @@ public class UserRepository {
 
     private static final FileReader FILE_READER = new FileReader();
 
-    public void addUser(User user) throws CustomException {
+    public void addUser(User user) throws CustomException, FileException {
         if (findByName(user.getUsername()).getUsername().equals("empty")) {
             FILE_READER.addToFile(user);
         } else {
@@ -15,11 +15,11 @@ public class UserRepository {
         }
     }
 
-    public List<User> findAll() {
+    public List<User> findAll() throws FileException {
         return FILE_READER.findAll();
     }
 
-    public User findByName(String username) throws CustomException {
+    public User findByName(String username) throws CustomException, FileException {
         for (User element : FILE_READER.findAll()) {
             if (Objects.equals(element.getUsername(), username)) {
                 return element;

@@ -19,7 +19,7 @@ public class FileReader {
         }
     }
 
-    public List<User> findAll() {
+    public List<User> findAll() throws FileException {
         FileInputStream fileInputStream = null;
         List<User> userList = new ArrayList<>();
         try {
@@ -31,12 +31,12 @@ public class FileReader {
                 objectInputStream.close();
             }
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("IoExceprion");
+            throw new FileException();
         }
         return userList;
     }
 
-    public void addToFile(User user) {
+    public void addToFile(User user) throws FileException {
         FileOutputStream outputStream = null;
         List<User> usersList = findAll();
         try {

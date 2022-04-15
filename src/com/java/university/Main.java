@@ -8,8 +8,7 @@ public class Main {
     private static final UserService USER_SERVICE = new UserService();
 
     public static void main(String[] args) {
-//        Init init = new Init();
-//        init.init();
+
         while (true) {
             try {
                 readMainMenu();

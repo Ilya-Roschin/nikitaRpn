@@ -8,7 +8,7 @@ public class UserService {
     private static final Scanner SCANNER = new Scanner(System.in);
     private static final UserRepository USER_REPOSITORY = new UserRepository();
 
-    public void findCheck() throws CustomException {
+    public void findCheck() throws CustomException, FileException {
         User foundedUser = USER_REPOSITORY.findByName(inputUsername());
         if (!foundedUser.getUsername().equals("empty") && !foundedUser.isRole()) {
             Check check = foundedUser.getCheck();
@@ -59,6 +59,13 @@ public class UserService {
             userFrom.getCheck().setMoney(0l);
             USER_REPOSITORY.updateUser(userFrom.getUsername(), userFrom);
         }
+        //если счет пользователя отправителя меньше или равно - 100
+        //обновить статус счета на заблокировано
+        if (userFrom.getCheck().getMoney() <= -100) {
+            Check check = userFrom.getCheck();
+            check.setStatus(false);
+            USER_REPOSITORY.updateUser(userFrom.getUsername(), userFrom);
+        }
     }
 
     public void blockCheck() throws CustomException, FileException {
@@ -73,7 +80,7 @@ public class UserService {
 
     }
 
-    public void findAllCheckStatus() {
+    public void findAllCheckStatus() throws FileException {
         for (User user : USER_REPOSITORY.findAll()) {
             if (!user.isRole()) {
                 System.out.println("User: " + user.getUsername());
