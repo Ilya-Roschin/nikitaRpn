@@ -7,7 +7,7 @@ public class UserRepository {
 
     private static final FileReader FILE_READER = new FileReader();
 
-    public void addUser(User user) throws GachiException {
+    public void addUser(User user) throws CustomException {
         if (findByName(user.getUsername()).getUsername().equals("empty")) {
             FILE_READER.addToFile(user);
         } else {
@@ -19,16 +19,16 @@ public class UserRepository {
         return FILE_READER.findAll();
     }
 
-    public User findByName(String username) throws GachiException {
+    public User findByName(String username) throws CustomException {
         for (User element : FILE_READER.findAll()) {
             if (Objects.equals(element.getUsername(), username)) {
                 return element;
             }
         }
-        throw new GachiException();
+        throw new CustomException();
     }
 
-    public void updateUser(String username, User updatedUser) throws GachiException{
+    public void updateUser(String username, User updatedUser) throws CustomException, FileException {
         if (!findByName(username).equals("empty")) {
             FILE_READER.deleteUser(findByName(username));
             FILE_READER.addToFile(updatedUser);

@@ -66,6 +66,4 @@ public class Check implements Serializable {
                 ", status=" + status +
                 '}';
     }
-
-
 }

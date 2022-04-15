@@ -14,10 +14,17 @@ public class Main {
             try {
                 readMainMenu();
                 mainController();
-            } catch (GachiException e) {
+            } catch (CustomException e) {
                 System.out.println("Keep you ass back here");
-            } catch (Exception e) {
+                SCANNER.nextLine();
+            }
+            catch (FileException e) {
+                System.out.println("file exception");
+                SCANNER.nextLine();
+            }
+            catch (Exception e) {
                 System.out.println("Exception");
+                SCANNER.nextLine();
             }
 
         }
@@ -30,7 +37,7 @@ public class Main {
                 "3. back");
     }
 
-    private static void mainController() throws GachiException {
+    private static void mainController() throws CustomException, FileException {
         switch (choose()) {
             case 1:
                 readUserMenu();
@@ -42,9 +49,7 @@ public class Main {
                 break;
             default:
         }
-        throw new GachiException();
-//        readMainMenu();
-//        mainController();
+        throw new CustomException();
     }
 
     public static void readUserMenu() {
@@ -54,7 +59,7 @@ public class Main {
                 "3. back");
     }
 
-    public static void userController() throws GachiException {
+    public static void userController() throws CustomException, FileException {
         switch (choose()) {
             case 1:
                 USER_SERVICE.findCheck();
@@ -76,7 +81,7 @@ public class Main {
                 "3. back");
     }
 
-    public static void adminController() throws GachiException {
+    public static void adminController() throws CustomException, FileException {
         switch (choose()) {
             case 1:
                 USER_SERVICE.findAllCheckStatus();

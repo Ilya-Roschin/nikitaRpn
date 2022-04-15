@@ -8,7 +8,7 @@ public class UserService {
     private static final Scanner SCANNER = new Scanner(System.in);
     private static final UserRepository USER_REPOSITORY = new UserRepository();
 
-    public void findCheck() throws GachiException {
+    public void findCheck() throws CustomException {
         User foundedUser = USER_REPOSITORY.findByName(inputUsername());
         if (!foundedUser.getUsername().equals("empty") && !foundedUser.isRole()) {
             Check check = foundedUser.getCheck();
@@ -27,37 +27,41 @@ public class UserService {
 
     }
 
-    public void transaction() throws GachiException {
+    public void transaction() throws CustomException, FileException {
         System.out.println("from user: ");
         User userFrom = USER_REPOSITORY.findByName(inputUsername());
         System.out.println("To user: ");
         User userTo = USER_REPOSITORY.findByName(inputUsername());
+        if(userFrom.getCheck().getMoney() > 0) {
+            if (!Objects.equals(userFrom.getUsername(), "empty") &&
+                    !Objects.equals(userTo.getUsername(), "empty") &&
+                    !userTo.isRole() && !userFrom.isRole() &&
+                    userTo.getCheck().isStatus() && userFrom.getCheck().isStatus()) {
 
-        if (!Objects.equals(userFrom.getUsername(), "empty") &&
-                !Objects.equals(userTo.getUsername(), "empty") &&
-                !userTo.isRole() && !userFrom.isRole() &&
-                userTo.getCheck().isStatus() && userFrom.getCheck().isStatus()) {
+                System.out.println("enter transfer amount ");
+                long transferAmount = SCANNER.nextLong();
 
-            System.out.println("enter transfer amount ");
-            long transferAmount = SCANNER.nextLong();
+                userTo.setCheck(new Check(userTo.getCheck().getCardNumber(),
+                        userTo.getCheck().getMoney() + transferAmount,
+                        userTo.getCheck().isStatus()));
 
-            userTo.setCheck(new Check(userTo.getCheck().getCardNumber(),
-                    userTo.getCheck().getMoney() + transferAmount,
-                    userTo.getCheck().isStatus()));
+                userFrom.setCheck(new Check(userFrom.getCheck().getCardNumber(),
+                        userFrom.getCheck().getMoney() - transferAmount,
+                        userFrom.getCheck().isStatus()));
 
-            userFrom.setCheck(new Check(userFrom.getCheck().getCardNumber(),
-                    userFrom.getCheck().getMoney() - transferAmount,
-                    userFrom.getCheck().isStatus()));
-
-            USER_REPOSITORY.updateUser(userTo.getUsername(),userTo);
-            USER_REPOSITORY.updateUser(userFrom.getUsername(),userFrom);
+                USER_REPOSITORY.updateUser(userTo.getUsername(),userTo);
+                USER_REPOSITORY.updateUser(userFrom.getUsername(),userFrom);
+            } else {
+                System.out.println("Incorrect input or one of this user is blocked");
+            }
         } else {
-            System.out.println("Incorrect input or one of this user is blocked");
+            System.out.println("fist user check is empty");
+            userFrom.getCheck().setMoney(0l);
+            USER_REPOSITORY.updateUser(userFrom.getUsername(), userFrom);
         }
-
     }
 
-    public void blockCheck() throws GachiException {
+    public void blockCheck() throws CustomException, FileException {
         User foundedUser = USER_REPOSITORY.findByName(inputUsername());
         if (!Objects.equals(foundedUser.getUsername(), "empty")) {
             Check check = foundedUser.getCheck();

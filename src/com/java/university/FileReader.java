@@ -10,12 +10,12 @@ public class FileReader {
     private static final String PATH = "src/com/java/university/data.bat";
     private static final File FILE = new File(PATH);
 
-    public void clearFile() {
+    public void clearFile() throws FileException {
         try {
             FILE.delete();
             FILE.createNewFile();
         } catch (IOException e) {
-            System.out.println("File Exeption");
+            throw new FileException();
         }
     }
 
@@ -54,7 +54,7 @@ public class FileReader {
         }
     }
 
-    public void deleteUser(User user) {
+    public void deleteUser(User user) throws FileException {
         List<User> userList = findAll();
         clearFile();
         for (int i = 0; i < userList.size(); i++) {
